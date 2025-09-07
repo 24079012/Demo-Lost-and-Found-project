@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Welcome to the Lost & Found For Students</h2>
+
+{% if not session.get('username') %}
+<div style="display:flex; gap:50px; flex-wrap:wrap;">
+    
+    <div>
+        <h3>Login</h3>
+        <form method="POST" action="{{ url_for('index') }}">
+            <input type="hidden" name="action" value="login">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <div>
+        <h3>Register</h3>
+        <form method="POST" action="{{ url_for('index') }}" style="display:flex; flex-direction:column; max-width:250px;">
+            <input type="hidden" name="action" value="register">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit">Register</button>
+        </form>
+    </div>
+</div>
+{% else %}
+<p>Hello, <strong>{{ session.get('username') }}</strong>! You are logged in.</p>
+{% endif %}
+{% endblock %}

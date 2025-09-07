@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>My Reported Items</h2>
+
+{% if items %}
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Photo</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+    {% for item in items %}
+    <tr>
+        <td>{{ item.name }}</td>
+        <td>{{ item.description }}</td>
+        <td>
+            {% if item.photo %}
+                <img src="{{ url_for('static', filename='uploads/' ~ item.photo) }}">
+            {% endif %}
+        </td>
+        <td>{{ item.status|capitalize }}</td>
+        <td>
+            <!-- Edit Form (inline) -->
+            <form method="POST" action="{{ url_for('my_items') }}" enctype="multipart/form-data" style="display:inline-block;">
+                <input type="hidden" name="item_id" value="{{ item.id }}">
+                <input type="text" name="item_name" value="{{ item.name }}" placeholder="Name" required>
+                <input type="text" name="description" value="{{ item.description }}" placeholder="Description" required>
+                <select name="status" required>
+                    <option value="lost" {% if item.status == 'lost' %}selected{% endif %}>Lost</option>
+                    <option value="found" {% if item.status == 'found' %}selected{% endif %}>Found</option>
+                </select>
+                <input type="file" name="photo" accept="image/*">
+                <button type="submit">Update</button>
+            </form>
+            <!-- Delete Form -->
+            <form method="POST" action="{{ url_for('delete_item_inline', item_id=item.id) }}" style="display:inline-block;">
+                <button type="submit" onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>You have not reported any items yet.</p>
+{% endif %}
+{% endblock %}

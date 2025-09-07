@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Lost & Found System</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            background-color: white; 
+        }
+
+        header { 
+            position: relative;
+            text-align: center;
+        }
+
+        header img {
+            width: 100%;
+            max-height: 200px;
+            object-fit: cover; 
+        }
+
+        header h1 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 2rem;
+            text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+        }
+
+        nav {
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        nav a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        nav a:hover { 
+            text-decoration: underline; 
+        }
+
+        main { 
+            margin: 20px auto; 
+            background-color: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            max-width: 900px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        input, button, select { 
+            padding: 8px; 
+            margin: 5px 0; 
+            width: 100%; 
+            max-width: 300px; 
+        }
+
+        button { 
+            background-color: #4CAF50; 
+            color: white; 
+            border: none; 
+            cursor: pointer; 
+        }
+        button:hover { 
+            background-color: #45a049; 
+        }
+
+        .flash-error { color: red; }
+        .flash-success { color: green; }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        table img {
+            max-width: 80px;
+            max-height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        
+    </style>
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='uploads/header.jpg') }}" alt="Header Image">
+        <h1>Lost & Found System</h1>
+        <nav>
+            <a href="{{ url_for('index') }}">Home</a>
+            {% if session.get('username') %}
+                <a href="{{ url_for('report_lost') }}">Report Lost</a>
+                <a href="{{ url_for('report_found') }}">Report Found</a>
+                <a href="{{ url_for('my_items') }}">My Items</a>
+                <a href="{{ url_for('search') }}">Search</a>
+                <a href="{{ url_for('logout') }}">Logout ({{ session.get('username') }})</a>
+            {% else %}
+                <a href="{{ url_for('search') }}">Search</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <p class="{% if category == 'error' %}flash-error{% else %}flash-success{% endif %}">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
+

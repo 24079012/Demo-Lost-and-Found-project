@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Report Lost Item</h2>
+<form method="POST" action="{{ url_for('report_lost') }}" enctype="multipart/form-data">
+    <input type="text" name="item_name" placeholder="Item Name" required>
+    <input type="text" name="description" placeholder="Description" required>
+    <input type="file" name="photo" accept="image/*">
+    <button type="submit">Submit</button>
+</form>
+{% endblock %}

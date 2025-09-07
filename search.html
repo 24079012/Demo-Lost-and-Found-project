@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Search Items</h2>
+<form method="GET" action="{{ url_for('search') }}">
+    <input type="text" name="query" placeholder="Enter item name or description" required>
+    <button type="submit">Search</button>
+</form>
+
+{% if results %}
+<h3>Results:</h3>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Photo</th>
+        <th>Status</th>
+    </tr>
+    {% for item in results %}
+    <tr>
+        <td>{{ item.name }}</td>
+        <td>{{ item.description }}</td>
+        <td>
+            {% if item.photo %}
+                <img src="{{ url_for('static', filename='uploads/' ~ item.photo) }}">
+            {% endif %}
+        </td>
+        <td>{{ item.status|capitalize }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% elif query %}
+<p>No items found matching "{{ query }}".</p>
+{% endif %}
+{% endblock %}
+
